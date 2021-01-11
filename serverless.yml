@@ -1,0 +1,49 @@
+service: strawberry-ws
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: python3.8
+  memorySize: 2048
+  timeout: 20
+
+  environment:
+    WEBSOCKET_API_ENDPOINT:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: WebsocketsApi
+          - .execute-api.
+          - Ref: AWS::Region
+          - .amazonaws.com/
+          - ${self:provider.stage}
+
+functions:
+  hello:
+    handler: app.handler
+
+    events:
+      - httpApi: POST /
+
+  cors:
+    handler: app.graphiql_app_handler
+    events:
+      - httpApi: GET /
+      - httpApi: OPTIONS /
+
+  connectionManager:
+    handler: app.ws_connection
+    events:
+      - websocket:
+          route: $connect
+      - websocket:
+          route: $disconnect
+
+  defaultMessages:
+    handler: app.ws_message
+    events:
+      - websocket:
+          route: $default
+
+plugins:
+  - serverless-python-requirements

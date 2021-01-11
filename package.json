@@ -1,0 +1,16 @@
+{
+  "name": "strawberry-lambda-ws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "null",
+  "dependencies": {
+    "serverless": "^2.15.0",
+    "serverless-python-requirements": "^5.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "deploy": "sls deploy"
+  },
+  "author": "",
+  "license": "MIT"
+}
